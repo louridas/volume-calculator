@@ -1,0 +1,3 @@
+An implementation of polyhedral volume calculation following the
+divergence theorem and O' Rourke's Computational Geometry in C (2nd
+ed.).
