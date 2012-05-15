@@ -74,6 +74,86 @@ double calculate_volume(int num_vertices, vector3d *vectors, int num_trfaces,
     return volume;
 }
 
+/**
+ * Calculate the volume of a quadrilaterally-faced hexahedron. The
+ * vertices of the hexahedron function are as in the following figure,
+ * describing the case for cubes.
+ *          
+ *       4  .__________. 7
+ *         /|      6  /|
+ *    5  ./_|_______./ |
+ *       |  |       |  |
+ *       |  |0      |  |
+ *       |  |_______|__|3
+ *       | /        | /
+ *    1  |/_________|/ 2
+ *
+ * vertices is an array of 3d vectors in the order shown above.
+ */
+double calculate_volume_qfhexahedron(vector3d *vertices) {
+    
+    int num_vertices = 8;
+    int num_trfaces = 12;
+
+    int vector_indices[] = {
+        0, 2, 1, // base
+        0, 3, 2, // base
+        4, 5, 6, // top
+        4, 6, 7, // top
+        0, 5, 4, // left
+        0, 1, 5, // left
+        1, 6, 5, // front
+        1, 2, 6, // front
+        3, 6, 2, // right
+        3, 7, 6, // right
+        0, 7, 3, // back
+        0, 4, 7 // back        
+    };
+
+    double volume =
+        calculate_volume(num_vertices, vertices, num_trfaces, vector_indices);
+
+    return volume;
+}
+
+/**
+ * Calculate the volume of a prism. The vertices of the prism are as
+ * in the following figure. It is not necessary for the top and the bottom to
+ * be parallel to each other.
+ * 
+ *        3 .
+ *         /|\
+ *     4 ./_|_\. 5
+ *       |  |  |  
+ *       |  |0 |
+ *       |  |  |
+ *       | / \ |
+ *    1  |/___\| 2
+ *
+ * vertices is an array of 3d vectors in the order shown above
+ */
+double calculate_volume_prism(vector3d *vertices) {
+    
+    int num_vertices = 6;
+
+    int num_trfaces = 8;
+    int vector_indices[] = {
+        0, 1, 2, // base
+        3, 4, 5, // top
+        0, 4, 3, // left
+        0, 1, 4, // left
+        1, 5, 4, // front
+        1, 2, 5, // front
+        0, 3, 5, // right
+        0, 5, 2, // right
+    };
+
+    double volume =
+        calculate_volume(num_vertices, vertices, num_trfaces, vector_indices);
+    return volume;
+    
+}
+
 void test_pyramid() {
     
     int num_vertices = 4;
@@ -113,7 +193,6 @@ void test_pyramid() {
  */
 void test_cube() {
     
-    int num_vertices = 8;
     vector3d vertices[] = {
         {0, 0, 0}, // 0
         {2, 0, 0}, // 1
@@ -124,24 +203,8 @@ void test_cube() {
         {2, 2, 2}, // 6
         {0, 2, 2} // 7
     };
-    int num_trfaces = 12;
-    int vector_indices[] = {
-        0, 2, 1, // base
-        0, 3, 2, // base
-        4, 5, 6, // top
-        4, 6, 7, // top
-        0, 5, 4, // left
-        0, 1, 5, // left
-        1, 6, 5, // front
-        1, 2, 6, // front
-        3, 6, 2, // right
-        3, 7, 6, // right
-        0, 7, 3, // back
-        0, 4, 7 // back        
-    };
 
-    double volume =
-        calculate_volume(num_vertices, vertices, num_trfaces, vector_indices);
+    double volume = calculate_volume_qfhexahedron(vertices);
     assert(volume - 8.0 < EPSILON);
     printf("%lf\n", volume);
 }
@@ -153,7 +216,6 @@ void test_cube() {
  */
 void test_parallelepiped() {
 
-    int num_vertices = 8;
     vector3d vertices[] = {
         {0, 0, 0}, // 0
         {4, 0, 0}, // 1
@@ -164,24 +226,8 @@ void test_parallelepiped() {
         {4, 2, 2}, // 6
         {0, 2, 2}  // 7
     };
-    int num_trfaces = 12;
-    int vector_indices[] = {
-        0, 2, 1, // base
-        0, 3, 2, // base
-        4, 5, 6, // top
-        4, 6, 7, // top
-        0, 5, 4, // left
-        0, 1, 5, // left
-        1, 6, 5, // front
-        1, 2, 6, // front
-        3, 6, 2, // right
-        3, 7, 6, // right
-        0, 7, 3, // back
-        0, 4, 7 // back        
-    };
 
-    double volume =
-        calculate_volume(num_vertices, vertices, num_trfaces, vector_indices);
+    double volume = calculate_volume_qfhexahedron(vertices);
     assert(volume - 16.0 < EPSILON);
     printf("%lf\n", volume);
 }
@@ -193,7 +239,6 @@ void test_parallelepiped() {
  */
 void test_slanted_parallelepiped() {
 
-    int num_vertices = 8;
     vector3d vertices[] = {
         {0, 0, 0}, // 0
         {4, 0, 0}, // 1
@@ -204,24 +249,8 @@ void test_slanted_parallelepiped() {
         {4, 3, 2}, // 6
         {0, 3, 2}  // 7
     };
-    int num_trfaces = 12;
-    int vector_indices[] = {
-        0, 2, 1, // base
-        0, 3, 2, // base
-        4, 5, 6, // top
-        4, 6, 7, // top
-        0, 5, 4, // left
-        0, 1, 5, // left
-        1, 6, 5, // front
-        1, 2, 6, // front
-        3, 6, 2, // right
-        3, 7, 6, // right
-        0, 7, 3, // back
-        0, 4, 7 // back        
-    };
 
-    double volume =
-        calculate_volume(num_vertices, vertices, num_trfaces, vector_indices);
+    double volume = calculate_volume_qfhexahedron(vertices);
     assert(volume - 16.0 < EPSILON);
     printf("%lf\n", volume);
 }
@@ -242,7 +271,6 @@ void test_slanted_parallelepiped() {
  */
 void test_prism() {
 
-    int num_vertices = 6;
     vector3d vertices[] = {
         {0, 0, 0}, // 0
         {4, 0, 0}, // 1
@@ -251,20 +279,9 @@ void test_prism() {
         {4, 0, 6}, // 4
         {0, 4, 6}, // 5
     };
-    int num_trfaces = 8;
-    int vector_indices[] = {
-        0, 1, 2, // base
-        3, 4, 5, // top
-        0, 4, 3, // left
-        0, 1, 4, // left
-        1, 5, 4, // front
-        1, 2, 5, // front
-        0, 3, 5, // right
-        0, 5, 2, // right
-    };
 
     double volume =
-        calculate_volume(num_vertices, vertices, num_trfaces, vector_indices);
+        calculate_volume_prism(vertices);
     assert(volume -48.0 < EPSILON);
     printf("%lf\n", volume);
 }
@@ -275,7 +292,6 @@ void test_prism() {
  */
 void test_3d_trapezium() {
 
-    int num_vertices = 8;
     vector3d vertices[] = {
         {0, 0, 0}, // 0
         {4, 0, 0}, // 1
@@ -286,24 +302,9 @@ void test_3d_trapezium() {
         {4, 2, 4}, // 6
         {0, 2, 4}  // 7
     };
-    int num_trfaces = 12;
-    int vector_indices[] = {
-        0, 2, 1, // base
-        0, 3, 2, // base
-        4, 5, 6, // top
-        4, 6, 7, // top
-        0, 5, 4, // left
-        0, 1, 5, // left
-        1, 6, 5, // front
-        1, 2, 6, // front
-        3, 6, 2, // right
-        3, 7, 6, // right
-        0, 7, 3, // back
-        0, 4, 7 // back        
-    };
 
     double volume =
-        calculate_volume(num_vertices, vertices, num_trfaces, vector_indices);
+        calculate_volume_qfhexahedron(vertices);
     assert(volume - 24.0 < EPSILON);
     printf("%lf\n", volume);
 }
